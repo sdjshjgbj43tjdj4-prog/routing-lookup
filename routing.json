@@ -1,1 +1,18 @@
-
+[
+  {
+    "bank": "Busey Bank",
+    "routing": "067014372",
+    "address": "502 W Windsor",
+    "city_ascii": "Champaign",
+    "state": "IL",
+    "zip": "61820"
+  },
+  {
+    "bank": "Berkshire Bank",
+    "routing": "011601074",
+    "address": "99 North Street",
+    "city_ascii": "Pittsfield",
+    "state": "MA",
+    "zip": "01201"
+  }
+]
