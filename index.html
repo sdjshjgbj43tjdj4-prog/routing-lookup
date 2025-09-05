@@ -48,15 +48,21 @@ async function loadStates() {
 
 // Load cities
 document.getElementById('state').addEventListener('change', async function(){
-  const state=this.value;
-  const citySelect=document.getElementById('city');
-  citySelect.innerHTML='<option value="">-- Select City --</option>';
-  if(state){
-    const res=await fetch(`/api/routing?action=cities&state=${encodeURIComponent(state)}`);
-    const cities=await res.json();
-    cities.forEach(city=>{const option=document.createElement('option');option.value=city;option.textContent=city;citySelect.appendChild(option);});
+  const state = this.value;
+  const citySelect = document.getElementById('city');
+  citySelect.innerHTML = '<option value="">-- Select City --</option>';
+  if (state) {
+    const res = await fetch(`/api/routing?action=cities&state=${encodeURIComponent(state)}`);
+    const cities = await res.json();
+    cities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      option.textContent = city;
+      citySelect.appendChild(option);
+    });
   }
 });
+
 
 // Search routing
 async function loadStates() {
