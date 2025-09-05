@@ -1,57 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Routing Number Lookup</title>
-<style>
-body, html { margin:0; padding:0; width:100%; height:100%; font-family:Arial; overflow:hidden;
-  background: linear-gradient(-45deg,#0a1a2b,#001f3f,#0a1a2b,#001f3f); background-size:400% 400%; animation:gradientBG 15s ease infinite; color:white;}
-@keyframes gradientBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-#bgCanvas{position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;}
-.container{max-width:500px; margin:60px auto; background:rgba(0,0,0,0.6); padding:35px; border-radius:15px; box-shadow:0 0 25px rgba(0,212,255,0.7); backdrop-filter:blur(8px); animation:glow 2s infinite alternate;}
-@keyframes glow{0%{box-shadow:0 0 15px rgba(0,212,255,0.5);}100%{box-shadow:0 0 35px rgba(0,212,255,0.9);}}
-h1{text-align:center;margin-bottom:30px;color:#00d4ff;text-shadow:2px 2px 8px #000;}
-label{display:block;margin:10px 0 5px;font-weight:bold;}
-select,input,button{width:100%;padding:12px;margin-bottom:20px;border:none;border-radius:8px;font-size:16px;transition:0.3s;}
-select,input{background:rgba(255,255,255,0.1); color:white;}
-select option{background:#0a1a2b;color:white;}
-input:focus,select:focus{box-shadow:0 0 12px #00d4ff;outline:none;}
-button{background:#00d4ff;color:#0a1a2b;font-weight:bold;cursor:pointer;box-shadow:0 0 12px #00d4ff;}
-button:hover{background:#00a0cc;color:white;box-shadow:0 0 20px #00d4ff;}
-.result{padding:15px;background:rgba(0,212,255,0.1);border-left:4px solid #00d4ff;border-radius:6px;margin-top:20px;}
-.error{padding:15px;background:rgba(255,0,0,0.1);border-left:4px solid red;border-radius:6px;margin-top:20px;}
-</style>
-</head>
-<body>
-<canvas id="bgCanvas"></canvas>
-<div class="container">
-<h1>Routing Number Lookup</h1>
-<label for="state">Select State</label>
 <select id="state"><option value="">-- Select State --</option></select>
-<label for="city">Select City</label>
 <select id="city"><option value="">-- Select City --</option></select>
-<label for="bank">Enter Bank Name</label>
-<input type="text" id="bank" placeholder="e.g. Busey Bank">
-<button onclick="searchRouting()">Search</button>
-<div id="output"></div>
-</div>
 
 <script>
-// Load states
 async function loadStates() {
   const res = await fetch('/api/routing?action=states');
   const states = await res.json();
   const stateSelect = document.getElementById('state');
-  states.forEach(st => { const option = document.createElement('option'); option.value=st; option.textContent=st; stateSelect.appendChild(option); });
+  states.forEach(st => {
+    const option = document.createElement('option');
+    option.value = st;
+    option.textContent = st;
+    stateSelect.appendChild(option);
+  });
 }
 
-// Load cities
 document.getElementById('state').addEventListener('change', async function(){
   const state = this.value;
   const citySelect = document.getElementById('city');
   citySelect.innerHTML = '<option value="">-- Select City --</option>';
-  if (state) {
+  if(state){
     const res = await fetch(`/api/routing?action=cities&state=${encodeURIComponent(state)}`);
     const cities = await res.json();
     cities.forEach(city => {
@@ -63,26 +30,5 @@ document.getElementById('state').addEventListener('change', async function(){
   }
 });
 
-
-// Search routing
-async function loadStates() {
-  const res = await fetch('/api/routing?action=states'); // call API
-  const states = await res.json();
-  const stateSelect = document.getElementById('state');
-  states.forEach(st => {
-    const option = document.createElement('option');
-    option.value = st;
-    option.textContent = st;
-    stateSelect.appendChild(option);
-  });
-}
-loadStates();
-
-// Background bubbles animation
-const canvas=document.getElementById('bgCanvas'); const ctx=canvas.getContext('2d');
-let w,h; function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;} window.addEventListener('resize',resize); resize();
-const bubbles=[]; for(let i=0;i<120;i++){bubbles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});}
-function animate(){ ctx.clearRect(0,0,w,h); for(const b of bubbles){ ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle='rgba(0,212,255,0.3)'; ctx.fill(); b.x+=b.dx; b.y+=b.dy; if(b.x<0)b.x=w;if(b.x>w)b.x=0;if(b.y<0)b.y=h;if(b.y>h)b.y=0;} requestAnimationFrame(animate);} animate();
+loadStates(); // call to populate states on page load
 </script>
-</body>
-</html>
