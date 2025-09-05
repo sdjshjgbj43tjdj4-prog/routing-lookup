@@ -59,27 +59,17 @@ document.getElementById('state').addEventListener('change', async function(){
 });
 
 // Search routing
-async function searchRouting(){
-  const bank=document.getElementById('bank').value.trim();
-  const city_ascii=document.getElementById('city').value.trim();
-  const state=document.getElementById('state').value.trim();
-  const output=document.getElementById('output'); output.innerHTML='';
-  if(!bank||!city_ascii||!state){output.innerHTML='<div class="error">⚠️ Please select state, city, and enter bank name.</div>';return;}
-  const url=`/api/routing?state=${encodeURIComponent(state)}&city_ascii=${encodeURIComponent(city_ascii)}&bank=${encodeURIComponent(bank)}`;
-  const res=await fetch(url);
-  if(res.ok){
-    const data=await res.json();
-    output.innerHTML=`<div class="result">
-      <p><strong>Bank:</strong> ${data.bank}</p>
-      <p><strong>Routing Number:</strong> ${data.routing}</p>
-      <p><strong>Address:</strong> ${data.address}</p>
-      <p><strong>City:</strong> ${data.city_ascii}</p>
-      <p><strong>State:</strong> ${data.state}</p>
-      <p><strong>ZIP Code:</strong> ${data.zip}</p>
-    </div>`;
-  } else {output.innerHTML='<div class="error">❌ No result found.</div>';}
+async function loadStates() {
+  const res = await fetch('/api/routing?action=states'); // call API
+  const states = await res.json();
+  const stateSelect = document.getElementById('state');
+  states.forEach(st => {
+    const option = document.createElement('option');
+    option.value = st;
+    option.textContent = st;
+    stateSelect.appendChild(option);
+  });
 }
-
 loadStates();
 
 // Background bubbles animation
